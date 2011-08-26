@@ -47,7 +47,7 @@ module I18n
           end
         end
 
-        def store_default_translation(locale, key, interpolations)
+        def store_default_translation(locale, key, interpolations = {})
           translation = ActiveRecord::Translation.new :locale => locale.to_s, :key => key
           translation.interpolations = interpolations
           translation.save
@@ -56,7 +56,10 @@ module I18n
         def translate(locale, key, options = {})
           super
         rescue I18n::MissingTranslationData => e
-          self.store_default_translations(locale, key, options)
+          #self.store_default_translations(locale, key, options)
+          unless options[:count] and !I18n.t('i18n.plural.keys', :locale => locale).is_a?(Array)
+            self.store_default_translations(locale, key, options)
+          end
           raise e
         end
       end

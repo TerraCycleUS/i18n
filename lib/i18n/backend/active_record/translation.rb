@@ -47,6 +47,8 @@ module I18n
     class ActiveRecord
       class Translation < ::ActiveRecord::Base
         set_table_name 'translations'
+#        is_cached :repository => $cache
+#        index [:locale, :key]
         attr_protected :is_proc, :interpolations
 
         serialize :value
